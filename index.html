@@ -760,12 +760,37 @@ function flip(wrap) {
 
 // ── Менеджер из URL-параметров ──────────────────────────────────────────────
 (function() {
-  var p     = new URLSearchParams(window.location.search);
-  var name  = p.get('name');
-  var role  = p.get('role');
-  var phone = p.get('phone');
-  var tg    = p.get('tg');
-  var email = p.get('email');
+  var p = new URLSearchParams(window.location.search);
+  var name, role, phone, tg, email;
+
+  // Декодируем compact base64url-параметр ?m=... (генерируется generator.html)
+  var m = p.get('m');
+  if (m) {
+    try {
+      // Восстанавливаем стандартный base64 из URL-safe варианта
+      var b64 = m.replace(/-/g, '+').replace(/_/g, '/');
+      // Добавляем padding если нужно
+      while (b64.length % 4) b64 += '=';
+      var binary = atob(b64);
+      var bytes = new Uint8Array(binary.length);
+      for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      var data = JSON.parse(new TextDecoder().decode(bytes));
+      name  = data.n || '';
+      role  = data.r || '';
+      phone = data.p || '';
+      tg    = data.t || '';
+      email = data.e || '';
+    } catch (err) {
+      console.warn('Ошибка декодирования параметра m:', err);
+    }
+  } else {
+    // Обратная совместимость: отдельные параметры
+    name  = p.get('name')  || '';
+    role  = p.get('role')  || '';
+    phone = p.get('phone') || '';
+    tg    = p.get('tg')    || '';
+    email = p.get('email') || '';
+  }
 
   if (!name && !phone && !tg) return;
 
