@@ -754,6 +754,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Оставляем старую функцию для btn-close (pointer-events:none убираем через CSS)
+function flip(wrap) {
+  wrap.classList.toggle('flipped');
+}
+
+// ── Менеджер из URL-параметров ──────────────────────────────────────────────
 (function() {
   var pParams = new URLSearchParams(window.location.search);
   var name = '', role = '', phone = '', tg = '', email = '';
