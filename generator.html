@@ -31,712 +31,338 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 32px 16px 56px;
-  background-image:
-    radial-gradient(ellipse 60% 40% at 90% 10%, rgba(232,25,122,.18) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 10% 90%, rgba(99,102,241,.12) 0%, transparent 60%);
 }
 
-/* ── HEADER ─────────────────────────────────────────────── */
-.header {
+.container {
   width: 100%;
   max-width: 520px;
-  margin-bottom: 32px;
-  animation: fadeDown .5s ease both;
 }
-
-.logo-line {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-.logo-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--pink);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,100% { transform: scale(1); opacity:1; }
-  50%      { transform: scale(1.4); opacity:.7; }
-}
-.logo-text { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
 
 h1 {
-  font-size: clamp(22px, 5vw, 30px);
+  font-size: 26px;
   font-weight: 800;
-  line-height: 1.15;
-  margin-bottom: 8px;
-}
-h1 span { color: var(--pink); }
-
-.subtitle {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.55;
+  margin-bottom: 24px;
+  text-align: center;
+  background: linear-gradient(135deg, #fff 30%, var(--muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* ── CARD ────────────────────────────────────────────────── */
 .card {
-  width: 100%;
-  max-width: 520px;
-  background: var(--card);
+  background: var(--mid);
   border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 28px;
-  box-shadow: 0 24px 64px rgba(0,0,0,.4);
-  animation: fadeUp .5s .1s ease both;
-}
-
-/* ── FORM ────────────────────────────────────────────────── */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 14px;
-}
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group.full { grid-column: 1 / -1; }
-
-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-label .lbl-icon { font-size: 13px; }
-
-input {
-  background: rgba(255,255,255,.06);
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  padding: 11px 14px;
-  font-size: 14px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  color: var(--text);
-  outline: none;
-  transition: border-color .2s, background .2s, box-shadow .2s;
-  width: 100%;
-}
-input::placeholder { color: rgba(255,255,255,.2); font-weight: 500; }
-input:focus {
-  border-color: var(--pink);
-  background: rgba(232,25,122,.06);
-  box-shadow: 0 0 0 3px rgba(232,25,122,.12);
-}
-input:not(:placeholder-shown) {
-  border-color: rgba(255,255,255,.2);
-}
-
-/* url field */
-.url-field-wrap {
-  position: relative;
+  border-radius: var(--radius);
+  padding: 24px;
   margin-bottom: 20px;
 }
-.url-field-wrap input {
-  padding-left: 36px;
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 500;
-}
-.url-field-wrap::before {
-  content: '🔗';
-  position: absolute;
-  left: 12px; top: 50%; transform: translateY(-50%);
-  font-size: 14px;
-  pointer-events: none;
-}
 
-/* ── DIVIDER ─────────────────────────────────────────────── */
-.divider {
-  display: flex; align-items: center; gap: 10px;
-  margin: 4px 0 18px;
-  color: var(--muted);
-  font-size: 11px;
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group:last-child { margin-bottom: 0; }
+
+label {
+  display: block;
+  font-size: 13px;
   font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.divider::before, .divider::after {
-  content:''; flex:1; height:1px;
-  background: var(--border);
+  letter-spacing: 0.5px;
 }
 
-/* ── BUTTON ──────────────────────────────────────────────── */
-.btn {
+input {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  font-family: 'Manrope', sans-serif;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform .15s, box-shadow .15s, opacity .15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  letter-spacing: .2px;
-}
-.btn-primary {
-  background: linear-gradient(135deg, #E8197A 0%, #c4005e 100%);
-  color: #fff;
-  box-shadow: 0 6px 24px rgba(232,25,122,.35);
-  margin-bottom: 10px;
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(232,25,122,.45); }
-.btn-primary:active { transform: translateY(0); }
-
-/* ── RESULT ──────────────────────────────────────────────── */
-.result {
-  margin-top: 24px;
-  padding: 20px;
-  background: rgba(34,197,94,.07);
-  border: 1.5px solid rgba(34,197,94,.25);
-  border-radius: 14px;
-  display: none;
-  flex-direction: column;
-  gap: 14px;
-  animation: fadeUp .3s ease both;
-}
-.result.visible { display: flex; }
-
-/* Короткая ссылка */
-.short-url-block {
-  background: rgba(232,25,122,.08);
-  border: 1.5px solid rgba(232,25,122,.3);
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.short-url-label {
-  font-size: 10px; font-weight: 700; color: var(--pink);
-  text-transform: uppercase; letter-spacing: 1px;
-  display: flex; align-items: center; gap: 5px;
-}
-.short-url-value {
-  font-size: 18px; font-weight: 800; color: #fff;
-  word-break: break-all; letter-spacing: .3px;
-}
-.short-url-actions { display: flex; gap: 8px; margin-top: 4px; }
-
-/* Спиннер */
-.spinner {
-  display: inline-block; width: 16px; height: 16px;
-  border: 2px solid rgba(255,255,255,.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin .6s linear infinite;
-  flex-shrink: 0;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* Длинная ссылка — сворачиваем */
-.long-url-toggle {
-  font-size: 11px; color: var(--muted); cursor: pointer;
-  text-decoration: underline; text-underline-offset: 2px;
-  background: none; border: none; font-family: 'Manrope',sans-serif;
-  padding: 0; text-align: left;
-}
-.long-url-block { display: none; }
-.long-url-block.open { display: flex; flex-direction: column; gap: 8px; }
-
-.result-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--green);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.result-label::before { content: '✓'; font-size: 13px; }
-
-.result-url {
-  background: rgba(255,255,255,.06);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,.75);
-  word-break: break-all;
-  line-height: 1.5;
-  cursor: text;
-  user-select: all;
+  font-family: inherit;
+  font-size: 15px;
+  color: #fff;
+  outline: none;
+  transition: border-color .2s;
+}
+input:focus {
+  border-color: var(--pink);
 }
 
-.result-actions { display: flex; gap: 8px; }
-
-.btn-copy {
-  flex: 1;
-  background: rgba(232,25,122,.15);
-  border: 1.5px solid rgba(232,25,122,.3);
-  color: var(--pink);
-  padding: 10px;
+button {
+  width: 100%;
+  background: var(--pink);
+  color: #fff;
+  border: none;
   border-radius: 10px;
-  font-family: 'Manrope', sans-serif;
-  font-size: 13px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  transition: background .2s, transform .15s;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: opacity .2s, transform .1s;
 }
-.btn-copy:hover { background: rgba(232,25,122,.25); transform: translateY(-1px); }
-.btn-copy.copied { background: rgba(34,197,94,.15); border-color: rgba(34,197,94,.3); color: var(--green); }
+button:active { transform: scale(.98); }
 
-.btn-open {
-  flex: 1;
-  background: rgba(255,255,255,.06);
-  border: 1.5px solid var(--border);
-  color: rgba(255,255,255,.7);
-  padding: 10px;
-  border-radius: 10px;
-  font-family: 'Manrope', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background .2s;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-}
-.btn-open:hover { background: rgba(255,255,255,.1); }
-
-/* ── PREVIEW ─────────────────────────────────────────────── */
-.preview-section {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
+.result-section {
   display: none;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+.result-section.visible { display: block; }
+
+.result-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.url-box {
+  background: var(--card);
+  border: 1px solid rgba(34,197,94,.2);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  word-break: break-all;
+  margin-bottom: 12px;
+  color: #93c5fd;
+  font-family: monospace;
+}
+
+/* PREVIEW SYSTEM */
+.preview-section {
+  display: none;
+  margin-top: 24px;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 .preview-section.visible { display: block; }
-.preview-label {
-  font-size: 11px; font-weight: 700; color: var(--muted);
-  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
-}
 
-.mgr-preview {
-  background: linear-gradient(145deg,#0f1729 0%,#1a2540 50%,#0f1729 100%);
-  border-radius: 14px;
-  padding: 18px;
-  border: 1px solid rgba(255,255,255,.08);
-}
-.mgr-preview-top { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-.mgr-preview-avatar {
-  width:44px; height:44px; border-radius:50%;
-  background: linear-gradient(135deg,#E8197A,#9B59F5);
-  display:flex; align-items:center; justify-content:center;
-  font-size:16px; font-weight:800; color:#fff; flex-shrink:0;
-}
-.mgr-preview-name { font-size:14px; font-weight:800; color:#fff; margin-bottom:2px; }
-.mgr-preview-role { font-size:9px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.7px; }
-.mgr-preview-divider { height:1px; background:rgba(255,255,255,.08); margin:10px 0; }
-.mgr-preview-rows { display:flex; flex-direction:column; gap:5px; }
-.mgr-preview-row {
-  display:flex; align-items:center; gap:8px;
-  padding:6px 9px; border-radius:8px;
-  background:rgba(255,255,255,.05);
-  font-size:11.5px; color:rgba(255,255,255,.75); font-weight:600;
-}
-
-/* ── TIP ─────────────────────────────────────────────────── */
-.tip {
-  width: 100%;
-  max-width: 520px;
-  margin-top: 16px;
-  padding: 14px 18px;
-  background: rgba(255,255,255,.04);
+.mgr-card-preview {
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  font-size: 12.5px;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mgr-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mgr-preview-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #6B6FD4 0%, #C65CBA 50%, #E8648A 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(232,25,122,.2);
+}
+
+.mgr-preview-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mgr-preview-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.mgr-preview-role {
+  font-size: 13px;
   color: var(--muted);
-  line-height: 1.6;
-  animation: fadeUp .5s .2s ease both;
-}
-.tip strong { color: rgba(255,255,255,.65); }
-
-/* ── ANIMATIONS ──────────────────────────────────────────── */
-@keyframes fadeDown {
-  from { opacity:0; transform:translateY(-16px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(20px); }
-  to   { opacity:1; transform:translateY(0); }
 }
 
-/* ── MOBILE ──────────────────────────────────────────────── */
-@media (max-width: 480px) {
-  body { padding: 20px 12px 48px; }
-  .card { padding: 20px 16px; }
-  .form-grid { grid-template-columns: 1fr; }
-  .form-group.full { grid-column: 1; }
+.mgr-preview-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.mgr-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: rgba(255,255,255,.8);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="logo-line">
-    <div class="logo-dot"></div>
-    <span class="logo-text">первый Бит / медицина</span>
-  </div>
-  <h1>Генератор<br><span>персональной ссылки</span></h1>
-  <p class="subtitle">Заполните данные — получите готовую ссылку на визитку с вашими контактами</p>
-</div>
-
-<div class="card">
-
-  <!-- URL визитки -->
-  <div class="url-field-wrap">
-    <input type="url" id="base-url" value="https://1medcard.ru" placeholder="URL визитки">
-  </div>
-
-  <div class="divider">Ваши данные</div>
-
-  <div class="form-grid">
-    <div class="form-group full">
-      <label><span class="lbl-icon">👤</span> Имя и фамилия</label>
-      <input type="text" id="f-name" placeholder="Иван Иванов" autocomplete="name">
-    </div>
-    <div class="form-group full">
-      <label><span class="lbl-icon">💼</span> Должность</label>
-      <input type="text" id="f-role" placeholder="Менеджер по работе с клиентами">
-    </div>
+<div class="container">
+  <h1>Конструктор визитки менеджера</h1>
+  
+  <div class="card">
     <div class="form-group">
-      <label><span class="lbl-icon">📞</span> Телефон</label>
-      <input type="tel" id="f-phone" placeholder="+7 900 000-00-00" autocomplete="tel">
+      <label>ФИО Менеджера</label>
+      <input type="text" id="f-name" placeholder="Иванов Александр">
     </div>
+    
     <div class="form-group">
-      <label><span class="lbl-icon">✈️</span> Telegram</label>
-      <input type="text" id="f-tg" placeholder="@username">
+      <label>Должность</label>
+      <input type="text" id="f-role" placeholder="Персональный менеджер">
     </div>
-    <div class="form-group full">
-      <label><span class="lbl-icon">✉️</span> Email</label>
-      <input type="email" id="f-email" placeholder="ivan@1cbit.ru" autocomplete="email">
+    
+    <div class="form-group">
+      <label>Телефон</label>
+      <input type="text" id="f-phone" placeholder="+7 (999) 123-45-67">
     </div>
-  </div>
-
-  <button class="btn btn-primary" onclick="generate()">
-    ✨ Сгенерировать ссылку
-  </button>
-
-  <!-- Результат -->
-  <div class="result" id="result">
-    <div class="result-label">Ваша персональная ссылка готова</div>
-
-    <!-- Короткая ссылка clck.ru -->
-    <div class="short-url-block" id="short-block" style="display:none;">
-      <div class="short-url-label">⚡ Короткая ссылка</div>
-      <div class="short-url-value" id="short-url">—</div>
-      <div class="short-url-actions">
-        <button class="btn-copy" id="btn-copy-short" onclick="copyShort()">
-          📋 Скопировать
-        </button>
-        <a class="btn-open" id="btn-open-short" href="#" target="_blank">
-          🚀 Открыть
-        </a>
-      </div>
+    
+    <div class="form-group">
+      <label>Telegram (Ник или ссылка)</label>
+      <input type="text" id="f-tg" placeholder="@alex_bit">
     </div>
-
-    <!-- Загрузка -->
-    <div id="shortening-status" style="display:none; align-items:center; gap:10px; font-size:13px; color:var(--muted);">
-      <div class="spinner"></div>
-      Сокращаем ссылку через clck.ru…
+    
+    <div class="form-group">
+      <label>Email</label>
+      <input type="text" id="f-email" placeholder="alex@1bit.ru">
     </div>
-
-    <!-- Длинная ссылка (свёрнута) -->
-    <div>
-      <button class="long-url-toggle" onclick="toggleLong()">▸ Показать полную ссылку</button>
-      <div class="long-url-block" id="long-block">
-        <div class="result-label" style="margin-top:8px;">Полная ссылка</div>
-        <div class="result-url" id="result-url"></div>
-        <div class="result-actions">
-          <button class="btn-copy" id="btn-copy" onclick="copyLink()">
-            📋 Скопировать полную
-          </button>
-          <a class="btn-open" id="btn-open" href="#" target="_blank">
-            🚀 Открыть
-          </a>
-        </div>
-      </div>
+    
+    <div class="form-group" style="margin-top: 24px;">
+      <button onclick="generateUrl()">Создать ссылку</button>
     </div>
   </div>
 
-  <!-- Превью -->
+  <div class="card result-section" id="result-section">
+    <div class="result-label">Ссылка успешно создана!</div>
+    <div class="url-box" id="url-output"></div>
+    <button onclick="copyUrl()" style="background:#22c55e;">Копировать ссылку</button>
+  </div>
+
   <div class="preview-section" id="preview-section">
-    <div class="preview-label">Так будет выглядеть блок менеджера</div>
-    <div class="mgr-preview">
-      <div class="mgr-preview-top">
-        <div class="mgr-preview-avatar" id="pv-avatar">?</div>
-        <div>
-          <div class="mgr-preview-name" id="pv-name">—</div>
-          <div class="mgr-preview-role" id="pv-role">первый Бит / медицина</div>
+    <label style="margin-bottom:10px;">Предпросмотр блока на визитке:</label>
+    <div class="mgr-card-preview">
+      <div class="mgr-preview-header">
+        <div class="mgr-preview-avatar" id="p-avatar">?</div>
+        <div class="mgr-preview-info">
+          <div class="mgr-preview-name" id="p-name">Имя не указано</div>
+          <div class="mgr-preview-role" id="p-role">Должность</div>
         </div>
       </div>
-      <div class="mgr-preview-divider"></div>
-      <div class="mgr-preview-rows" id="pv-rows"></div>
+      <div class="mgr-preview-contacts" id="p-contacts"></div>
     </div>
   </div>
-
-</div>
-
-<div class="tip">
-  💡 <strong>Как использовать:</strong> заполните поля один раз, скопируйте ссылку и сохраните её в заметки или закладки браузера. Эта ссылка — ваша персональная. Отправляйте её клиентам вместо обычной ссылки на визитку.
 </div>
 
 <script>
-var generatedUrl = '';
-
-// Нормализуем телефон
-function formatPhone(val) {
-  var d = val.replace(/[^\d+]/g, '');
-  if (!d) return '';
-  if (d.length === 11 && d[0] === '8') d = '+7' + d.slice(1);
-  else if (d.match(/^\d{10}$/))        d = '+7' + d;
-  else if (!d.startsWith('+'))          d = '+' + d;
-  return d;
-}
-
-// Кодируем данные в Base64 → один короткий параметр ?m=...
-function encodeData(obj) {
-  var json = JSON.stringify(obj);
-  // btoa не умеет кириллицу — конвертируем через TextEncoder → Uint8Array → base64
-  var bytes = new TextEncoder().encode(json);
-  var binary = '';
-  bytes.forEach(function(b) { binary += String.fromCharCode(b); });
-  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
-function generate() {
-  var base  = document.getElementById('base-url').value.trim();
+function generateUrl() {
   var name  = document.getElementById('f-name').value.trim();
   var role  = document.getElementById('f-role').value.trim();
-  var phone = formatPhone(document.getElementById('f-phone').value.trim());
+  var phone = document.getElementById('f-phone').value.trim();
   var tg    = document.getElementById('f-tg').value.trim().replace(/^@/, '');
   var email = document.getElementById('f-email').value.trim();
 
-  if (!base) { alert('Укажите URL визитки'); return; }
-  if (!name && !phone && !tg) {
-    alert('Заполните хотя бы имя, телефон или Telegram');
+  if (!name && !phone && !tg && !email) {
+    alert('Пожалуйста, заполните хотя бы одно поле.');
     return;
   }
 
-  // Упакуем все данные в один Base64-параметр
-  var data = {};
-  if (name)  data.n = name;
-  if (role)  data.r = role;
-  if (phone) data.p = phone;
-  if (tg)    data.t = tg;
-  if (email) data.e = email;
+  // Создаем объект данных
+  var obj = {
+    name: name,
+    role: role,
+    phone: phone,
+    tg: tg,
+    email: email
+  };
 
-  var encoded = encodeData(data);
-  var sep = base.indexOf('?') >= 0 ? '&' : '?';
-  var url = base + sep + 'm=' + encoded;
-  generatedUrl = url;
+  // Кодируем объект в JSON-строку
+  var jsonStr = JSON.stringify(obj);
 
-  // Показать блок результата и длинную ссылку
-  document.getElementById('result-url').textContent = url;
-  document.getElementById('btn-open').href = url;
-  document.getElementById('result').classList.add('visible');
+  // Безопасно кодируем кириллицу (UTF-8) в байтовую строку
+  var binaryStr = unescape(encodeURIComponent(jsonStr));
 
-  // Сбросить состояния
-  document.getElementById('short-block').style.display = 'none';
-  document.getElementById('shortening-status').style.display = 'none';
-  var bc = document.getElementById('btn-copy');
-  bc.classList.remove('copied');
-  bc.innerHTML = '📋 Скопировать полную';
+  // Кодируем в стандартный Base64
+  var base64 = window.btoa(binaryStr);
 
-  // Превью
+  // Превращаем Base64 в безопасный формат для адресной строки URL (URL-Safe)
+  var urlSafeBase64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+  // Формируем чистый путь к файлу index.html
+  var currentUrl = window.location.href.split('?')[0];
+  var indexUrl = currentUrl.replace(/generator.*\.html$/i, 'index.html');
+  
+  if (indexUrl === currentUrl) {
+    // Резервный случай, если имя файла генератора было кастомным
+    indexUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/')) + '/index.html';
+  }
+
+  // Склеиваем финальную ссылку
+  var finalUrl = indexUrl + '?p=' + urlSafeBase64;
+
+  // Показываем блок с результатом
+  document.getElementById('url-output').textContent = finalUrl;
+  document.getElementById('result-section').classList.add('visible');
+
+  // Обновляем интерактивное превью
   updatePreview(name, role, phone, tg, email);
   document.getElementById('preview-section').classList.add('visible');
-
-  // Scroll
-  setTimeout(function() {
-    document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }, 100);
-
-  // Сокращаем через clck.ru
-  shortenUrl(url);
+  
+  // Скроллим к результату
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
 }
 
-var shortUrl = '';
-
-function shortenUrl(longUrl) {
-  var status = document.getElementById('shortening-status');
-  var shortBlock = document.getElementById('short-block');
-  status.style.display = 'flex';
-  shortBlock.style.display = 'none';
-
-  // clck.ru CORS-friendly через no-cors нельзя читать ответ,
-  // поэтому используем jsonp-подход через скрипт-тег
-  var callbackName = 'clckCallback_' + Date.now();
-  var script = document.createElement('script');
-
-  // clck.ru поддерживает jsonp
-  script.src = 'https://clck.ru/--?url=' + encodeURIComponent(longUrl) + '&jsonp=' + callbackName;
-  script.onerror = function() {
-    status.style.display = 'none';
-    showShortFallback(longUrl);
-    document.body.removeChild(script);
-  };
-
-  var timer = setTimeout(function() {
-    status.style.display = 'none';
-    showShortFallback(longUrl);
-    if (document.body.contains(script)) document.body.removeChild(script);
-  }, 6000);
-
-  window[callbackName] = function(data) {
-    clearTimeout(timer);
-    status.style.display = 'none';
-    if (document.body.contains(script)) document.body.removeChild(script);
-    delete window[callbackName];
-
-    var short = (typeof data === 'string') ? data : (data && data.url ? data.url : '');
-    if (short && short.startsWith('http')) {
-      shortUrl = short;
-      showShortUrl(short);
-    } else {
-      showShortFallback(longUrl);
-    }
-  };
-
-  document.body.appendChild(script);
-}
-
-function showShortUrl(url) {
-  shortUrl = url;
-  document.getElementById('short-url').textContent = url;
-  document.getElementById('btn-open-short').href = url;
-  document.getElementById('short-block').style.display = 'flex';
-}
-
-function showShortFallback(longUrl) {
-  // clck.ru недоступен — показываем инструкцию
-  var sb = document.getElementById('short-block');
-  sb.style.background = 'rgba(255,200,0,.07)';
-  sb.style.borderColor = 'rgba(255,200,0,.3)';
-  sb.innerHTML = '<div class="short-url-label" style="color:#f59e0b;">⚠ Сокращение недоступно</div>'
-    + '<div style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;">'
-    + 'Скопируйте полную ссылку ниже и вставьте на <a href="https://clck.ru" target="_blank" style="color:var(--pink);">clck.ru</a> вручную.'
-    + '</div>';
-  sb.style.display = 'flex';
-}
-
-function copyShort() {
-  var url = shortUrl || document.getElementById('short-url').textContent;
-  if (!url || url === '—') return;
-  navigator.clipboard.writeText(url).then(function() {
-    var b = document.getElementById('btn-copy-short');
-    b.classList.add('copied'); b.innerHTML = '✓ Скопировано!';
-    setTimeout(function() { b.classList.remove('copied'); b.innerHTML = '📋 Скопировать'; }, 2500);
+function copyUrl() {
+  var urlText = document.getElementById('url-output').textContent;
+  navigator.clipboard.writeText(urlText).then(function() {
+    alert('Ссылка успешно скопирована в буфер обмена!');
   }).catch(function() {
-    var ta = document.createElement('textarea');
-    ta.value = url; ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta);
-    var b = document.getElementById('btn-copy-short');
-    b.classList.add('copied'); b.innerHTML = '✓ Скопировано!';
-    setTimeout(function() { b.classList.remove('copied'); b.innerHTML = '📋 Скопировать'; }, 2500);
-  });
-}
-
-function toggleLong() {
-  var block = document.getElementById('long-block');
-  var btn = document.querySelector('.long-url-toggle');
-  var open = block.classList.toggle('open');
-  btn.textContent = open ? '▾ Скрыть полную ссылку' : '▸ Показать полную ссылку';
-}
-
-function copyLink() {
-  if (!generatedUrl) return;
-  navigator.clipboard.writeText(generatedUrl).then(function() {
-    var bc = document.getElementById('btn-copy');
-    bc.classList.add('copied');
-    bc.innerHTML = '✓ Скопировано!';
-    setTimeout(function() {
-      bc.classList.remove('copied');
-      bc.innerHTML = '📋 Скопировать';
-    }, 2500);
-  }).catch(function() {
-    // Fallback for older browsers
-    var ta = document.createElement('textarea');
-    ta.value = generatedUrl;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    var bc = document.getElementById('btn-copy');
-    bc.classList.add('copied');
-    bc.innerHTML = '✓ Скопировано!';
-    setTimeout(function() {
-      bc.classList.remove('copied');
-      bc.innerHTML = '📋 Скопировать';
-    }, 2500);
+    alert('Не удалось скопировать. Пожалуйста, выделите текст в рамке и скопируйте вручную.');
   });
 }
 
 function updatePreview(name, role, phone, tg, email) {
-  // Инициалы
-  var initials = name
-    ? name.trim().split(/\s+/).map(function(w){ return w[0]; }).slice(0,2).join('').toUpperCase()
-    : '?';
+  var initials = name ? name.split(/\s+/).map(function(w){ return w[0]; }).slice(0,2).join('').toUpperCase() : '?';
+  document.getElementById('p-avatar').textContent = initials;
+  document.getElementById('p-name').textContent = name || 'Имя не указано';
+  document.getElementById('p-role').textContent = role || 'Должность';
 
-  document.getElementById('pv-avatar').textContent = initials;
-  document.getElementById('pv-name').textContent   = name  || '—';
-  document.getElementById('pv-role').textContent   = role  || 'первый Бит / медицина';
+  var pContacts = document.getElementById('p-contacts');
+  pContacts.innerHTML = '';
 
-  var rows = document.getElementById('pv-rows');
-  rows.innerHTML = '';
-
-  if (phone) rows.innerHTML += '<div class="mgr-preview-row">📞 ' + phone + '</div>';
-  if (tg)    rows.innerHTML += '<div class="mgr-preview-row">✈️ @' + tg.replace(/^@/,'') + '</div>';
-  if (email) rows.innerHTML += '<div class="mgr-preview-row">✉️ ' + email + '</div>';
+  if (phone) pContacts.innerHTML += '<div class="mgr-preview-row"><span>📞</span><span>' + phone + '</span></div>';
+  if (tg)    pContacts.innerHTML += '<div class="mgr-preview-row"><span>✈️</span><span>@' + tg + '</span></div>';
+  if (email) pContacts.innerHTML += '<div class="mgr-preview-row"><span>✉️</span><span>' + email + '</span></div>';
 
   if (!phone && !tg && !email) {
-    rows.innerHTML = '<div class="mgr-preview-row" style="color:rgba(255,255,255,.3)">Контакты не указаны</div>';
+    pContacts.innerHTML = '<div class="mgr-preview-row" style="color:rgba(255,255,255,.3)">Контакты не указаны</div>';
   }
 }
 
-// Live preview on input
+// Отслеживание ввода текста для живого превью
 ['f-name','f-role','f-phone','f-tg','f-email'].forEach(function(id) {
   document.getElementById(id).addEventListener('input', function() {
-    var ps = document.getElementById('preview-section');
-    if (!ps.classList.contains('visible') && document.getElementById('f-name').value) {
-      // mini live preview without URL
-      var name  = document.getElementById('f-name').value.trim();
-      var role  = document.getElementById('f-role').value.trim();
-      var phone = document.getElementById('f-phone').value.trim();
-      var tg    = document.getElementById('f-tg').value.trim().replace(/^@/,'');
-      var email = document.getElementById('f-email').value.trim();
+    var name  = document.getElementById('f-name').value.trim();
+    var role  = document.getElementById('f-role').value.trim();
+    var phone = document.getElementById('f-phone').value.trim();
+    var tg    = document.getElementById('f-tg').value.trim().replace(/^@/,'');
+    var email = document.getElementById('f-email').value.trim();
+    
+    if (name || role || phone || tg || email) {
       updatePreview(name, role, phone, tg, email);
-      ps.classList.add('visible');
-    } else if (ps.classList.contains('visible')) {
-      var name  = document.getElementById('f-name').value.trim();
-      var role  = document.getElementById('f-role').value.trim();
-      var phone = document.getElementById('f-phone').value.trim();
-      var tg    = document.getElementById('f-tg').value.trim().replace(/^@/,'');
-      var email = document.getElementById('f-email').value.trim();
-      updatePreview(name, role, phone, tg, email);
+      document.getElementById('preview-section').classList.add('visible');
     }
   });
 });
-
-// Enter to generate
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') generate();
-});
 </script>
+
 </body>
 </html>
