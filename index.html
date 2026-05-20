@@ -356,45 +356,59 @@ body {
 .card-yt .qr-wrap img { background:#fff; }
 
 /* Контакты менеджера — dark premium */
-.card-mgr            { cursor:default; }
+.card-mgr { cursor:default; }
 .card-mgr .card-front {
   background: linear-gradient(145deg,#0f1729 0%,#1a2540 50%,#0f1729 100%);
-  padding: 22px 20px 20px;
+  padding: 18px 18px 16px;
   justify-content: flex-start;
   gap: 0;
+  overflow: hidden;           /* контент не вылезает */
+  box-sizing: border-box;
 }
 .card-mgr .card-back { display:none; }
 .card-mgr .btn-plus  { display:none; }
 .card-mgr .qr-wrap   { display:none; }
 .card-mgr .ch-name   { display:none; }
 
-.mgr-top   { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.mgr-top { display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-shrink:0; }
 .mgr-avatar {
-  width:54px; height:54px; border-radius:50%;
+  width:48px; height:48px; border-radius:50%;
   background: linear-gradient(135deg,#E8197A,#9B59F5);
   display:flex; align-items:center; justify-content:center;
-  font-size:20px; font-weight:800; color:#fff; flex-shrink:0;
+  font-size:18px; font-weight:800; color:#fff; flex-shrink:0;
   font-family:'Manrope',-apple-system,sans-serif;
 }
-.mgr-info  { flex:1; min-width:0; }
-.mgr-name  { font-size:15px; font-weight:800; color:#fff; line-height:1.2; margin-bottom:3px; }
-.mgr-role  { font-size:10px; color:rgba(255,255,255,.45); font-weight:600;
-             text-transform:uppercase; letter-spacing:.8px; }
-.mgr-divider { width:100%; height:1px; background:rgba(255,255,255,.1); margin:12px 0; }
-.mgr-contacts { display:flex; flex-direction:column; gap:7px; }
+.mgr-info  { flex:1; min-width:0; overflow:hidden; }
+.mgr-name  {
+  font-size:14px; font-weight:800; color:#fff;
+  line-height:1.2; margin-bottom:2px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.mgr-role  {
+  font-size:9px; color:rgba(255,255,255,.45); font-weight:600;
+  text-transform:uppercase; letter-spacing:.7px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.mgr-divider { width:100%; height:1px; background:rgba(255,255,255,.1); margin:8px 0; flex-shrink:0; }
+.mgr-contacts { display:flex; flex-direction:column; gap:5px; flex:1; overflow:hidden; }
 .mgr-row {
-  display:flex; align-items:center; gap:9px;
-  text-decoration:none; padding:7px 10px; border-radius:10px;
+  display:flex; align-items:center; gap:8px;
+  text-decoration:none; padding:6px 9px; border-radius:9px;
   background:rgba(255,255,255,.07); transition:background .2s;
+  flex-shrink:0;
 }
 .mgr-row:hover { background:rgba(255,255,255,.13); }
-.mgr-icon { font-size:15px; flex-shrink:0; }
-.mgr-text { font-size:12px; font-weight:600; color:rgba(255,255,255,.88); word-break:break-all; }
+.mgr-icon { font-size:14px; flex-shrink:0; line-height:1; }
+.mgr-text {
+  font-size:11.5px; font-weight:600; color:rgba(255,255,255,.88);
+  word-break:break-all; line-height:1.3;
+}
 .mgr-badge {
-  display:inline-block; margin-top:10px;
-  padding:4px 10px; border-radius:20px;
+  display:block; margin-top:8px; flex-shrink:0;
+  padding:3px 10px; border-radius:20px;
   background:rgba(232,25,122,.18); border:1px solid rgba(232,25,122,.35);
-  font-size:10px; color:rgba(232,25,122,.9); font-weight:700; letter-spacing:.5px;
+  font-size:9.5px; color:rgba(232,25,122,.9); font-weight:700;
+  letter-spacing:.4px; text-align:center;
 }
 
 /* ── Grid row 3 ──────────────────────────────────────────── */
@@ -759,60 +773,18 @@ function flip(wrap) {
 }
 
 // ── Менеджер из URL-параметров ──────────────────────────────────────────────
-<script>
+// Ссылка: vizitka.html?name=Иван+Иванов&role=Менеджер&phone=%2B79001234567&tg=ivan&email=ivan@1cbit.ru
 (function() {
-  var pParams = new URLSearchParams(window.location.search);
-  var name = '', role = '', phone = '', tg = '', email = '';
+  var p     = new URLSearchParams(window.location.search);
+  var name  = p.get('name');
+  var role  = p.get('role');
+  var phone = p.get('phone');
+  var tg    = p.get('tg');
+  var email = p.get('email');
 
-  // Читаем зашифрованный параметр 'p'
-  var base64Data = pParams.get('p');
+  if (!name && !phone && !tg) return;
 
-  if (base64Data) {
-    try {
-      // 1. Возвращаем URL-safe Base64 символы обратно в стандартные (+ и /)
-      var normalizedB64 = base64Data.replace(/-/g, '+').replace(/_/g, '/');
-      
-      // Дописываем знаки равенства (=) на конце, если они были стерты
-      while (normalizedB64.length % 4) {
-        normalizedB64 += '=';
-      }
-
-      // 2. Декодируем из Base64 в бинарную строку
-      var binaryString = window.atob(normalizedB64);
-      
-      // 3. Надежное декодирование бинарной строки в UTF-8 (Кириллицу) через decodeURIComponent
-      var jsonString = decodeURIComponent(binaryString.split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-
-      // 4. Парсим получившийся JSON объект
-      var obj = JSON.parse(jsonString);
-
-      name  = obj.name || '';
-      role  = obj.role || '';
-      phone = obj.phone || '';
-      tg    = obj.tg || '';
-      email = obj.email || '';
-    } catch (e) {
-      console.error("Ошибка декодирования персональных данных менеджера:", e);
-    }
-  } else {
-    // Резервный вариант на случай, если данные переданы обычным текстом (name=...&phone=...)
-    name  = pParams.get('name') || '';
-    role  = pParams.get('role') || '';
-    phone = pParams.get('phone') || '';
-    tg    = pParams.get('tg') || '';
-    email = pParams.get('email') || '';
-  }
-
-  // Если нет никаких контактных данных, прерываем выполнение и скрываем карточку менеджера
-  if (!name && !phone && !tg && !email) {
-    var mgrCard = document.getElementById('card-mgr');
-    if (mgrCard) mgrCard.style.display = 'none';
-    return;
-  }
-
-  // Считаем инициалы из имени для аватарки
+  // Инициалы из имени
   var initials = name ? name.trim().split(/\s+/).map(function(w){ return w[0]; }).slice(0,2).join('').toUpperCase() : '?';
 
   document.getElementById('mgr-initials').textContent = initials;
