@@ -754,20 +754,46 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Оставляем старую функцию для btn-close (pointer-events:none убираем через CSS)
-function flip(wrap) {
-  wrap.classList.toggle('flipped');
-}
-
-// ── Менеджер из URL-параметров ──────────────────────────────────────────────
 (function() {
-  var p     = new URLSearchParams(window.location.search);
-  var name  = p.get('name');
-  var role  = p.get('role');
-  var phone = p.get('phone');
-  var tg    = p.get('tg');
-  var email = p.get('email');
+  var pParams = new URLSearchParams(window.location.search);
+  var name = '', role = '', phone = '', tg = '', email = '';
 
-  if (!name && !phone && !tg) return;
+  // Проверяем, передан ли зашифрованный параметр 'p'
+  var base64Data = pParams.get('p');
+
+  if (base64Data) {
+    try {
+      // Декодируем Base64 в Uint8Array (с поддержкой безопасных для URL символов)
+      var normalizedB64 = base64Data.replace(/-/g, '+').replace(/_/g, '/');
+      var binaryString = window.atob(normalizedB64);
+      var bytes = new Uint8Array(binaryString.length);
+      for (var i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      // Декодируем Uint8Array обратно в UTF-8 строку (JSON)
+      var jsonString = new TextDecoder().decode(bytes);
+      var obj = JSON.parse(jsonString);
+
+      // Заполняем переменные данными из объекта
+      name  = obj.name || '';
+      role  = obj.role || '';
+      phone = obj.phone || '';
+      tg    = obj.tg || '';
+      email = obj.email || '';
+    } catch (e) {
+      console.error("Ошибка декодирования персональных данных:", e);
+    }
+  } else {
+    // Резервный вариант: если данные переданы в обычном открытом виде
+    name  = pParams.get('name') || '';
+    role  = pParams.get('role') || '';
+    phone = pParams.get('phone') || '';
+    tg    = pParams.get('tg') || '';
+    email = pParams.get('email') || '';
+  }
+
+  // Если нет ключевых контактов, скрываем или очищаем блок (или выходим)
+  if (!name && !phone && !tg && !email) return;
 
   // Инициалы из имени
   var initials = name ? name.trim().split(/\s+/).map(function(w){ return w[0]; }).slice(0,2).join('').toUpperCase() : '?';
