@@ -103,7 +103,7 @@ const SITE = {
   /* Иконки соцсетей. icon — одно из: telegram, vk, rutube, dzen */
   social:[
     {icon:'telegram', name:'Telegram',  link:''},
-    {icon:'vk',       name:'ВКонтакте', link:'https://vk.ru/bit_medicina'},
+    {icon:'vk',       name:'ВКонтакте', link:https://vk.ru/bit_medicina},
     {icon:'rutube',   name:'Rutube',    link:''},
     {icon:'dzen',     name:'Дзен',      link:''},
   ],
