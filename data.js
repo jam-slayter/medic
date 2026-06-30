@@ -48,7 +48,7 @@ const SITE = {
   ],
 
   /* ---- Заголовок и названия разделов ---- */
-  digestTitle: 'Дайджест за июль 2026',
+  digestTitle: 'Дайджест за июнь 2026',
   secCases:    'Кейсы внедрения',
   secArticles: 'Статьи',
   secNews:     'Новости',
@@ -63,7 +63,7 @@ const SITE = {
   guideTitle:    'Руководства пользователя',
   guideSub:      'Инструкции по системам и сервисам',
   guideBtn:      'Открыть руководство',
-  guideLink:     '',   // если задать ссылку — кнопка откроет её
+  guideLink:     'https://info.bitmedic.ru/umc/',   // если задать ссылку — кнопка откроет её
   guideModalTitle:'Инструкции по системам и сервисам',
   guideModalText: 'Пошаговые материалы по работе с продуктами Первого БИТ для медицины: настройка, ежедневная работа и обучение сотрудников.',
   guideModalList: [
@@ -82,14 +82,14 @@ const SITE = {
   ],
 
   /* ---- Окно «Не нашли нужную информацию?» ---- */
-  helpTitle:'Задайте вопрос экспертам Первого БИТ',
+  helpTitle:'Задайте вопрос экспертам Первого Бит',
   helpText: 'Опишите задачу — и наши специалисты подберут подходящее решение, инструкцию или материал. Мы помогаем медицинским организациям с цифровизацией более 20 лет.',
   helpEmail:'Mk_chl@1cbit.ru',
   helpNote: 'Ответ в течение дня',
   helpBtn:  'Написать письмо',
 
   /* ---- Нижняя розовая полоса ---- */
-  stripTitle:'Все материалы подготовлены экспертами Первого БИТ',
+  stripTitle:'Все материалы подготовлены экспертами Первого Бит',
   stripText: 'Мы помогаем медицинским организациям работать эффективно и соответствовать требованиям законодательства.',
   stripMailLabel:'Написать нам',
   stripEmail:'Mk_chl@1cbit.ru',
@@ -102,9 +102,9 @@ const SITE = {
   socialLabel:'Мы в соцсетях',
   /* Иконки соцсетей. icon — одно из: telegram, vk, rutube, dzen */
   social:[
-    {icon:'telegram', name:'Telegram',  link:''},
+    {icon:'telegram', name:'Telegram',  link:'https://t.me/bit_medic'},
     {icon:'vk',       name:'ВКонтакте', link:'https://vk.ru/bit_medicina'},
-    {icon:'rutube',   name:'Rutube',    link:''},
+    {icon:'rutube',   name:'Rutube',    link:'https://rutube.ru/channel/42197511/'},
     {icon:'dzen',     name:'Дзен',      link:''},
   ],
 };
