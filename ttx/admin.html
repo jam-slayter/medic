@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админка · Центр знаний</title>
+<style>
+  :root{--bg:#f5f1ee;--surface:#fffdfa;--ink:#17141a;--muted:#6d666d;--line:#e8ded9;--pink:#bc2d78;--pink-dark:#8f1f59;--gold:#c7aa72;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,Manrope,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+  header{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:12px;padding:13px 20px;flex-wrap:wrap;box-shadow:0 2px 14px rgba(37,22,29,.05)}
+  header .logo{font-weight:800;font-size:15px}
+  header .logo b{color:var(--pink)}
+  header .sp{flex:1}
+  .btn{border:none;border-radius:11px;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;transition:.2s}
+  .btn.primary{background:var(--pink);color:#fff}
+  .btn.primary:hover{box-shadow:0 10px 26px rgba(188,45,120,.3)}
+  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--pink);color:var(--pink)}
+  .wrap{max-width:900px;margin:0 auto;padding:20px}
+  .hint{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--pink);border-radius:13px;
+    padding:14px 16px;font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.55}
+  .hint b{color:var(--ink)}
+  .search{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 14px;font-size:14px;margin-bottom:16px;background:#fff;font-family:inherit}
+  .search:focus{outline:none;border-color:var(--pink)}
+  details.sec{background:var(--surface);border:1px solid var(--line);border-radius:15px;margin-bottom:12px;overflow:hidden}
+  details.sec>summary{cursor:pointer;padding:15px 18px;font-weight:800;font-size:15.5px;list-style:none;display:flex;align-items:center;gap:9px}
+  details.sec>summary::-webkit-details-marker{display:none}
+  details.sec>summary::before{content:"▸";color:var(--pink);transition:.2s;font-size:13px}
+  details.sec[open]>summary::before{transform:rotate(90deg)}
+  details.sec>summary .cnt{color:var(--muted);font-weight:600;font-size:12.5px}
+  .sec-body{padding:2px 18px 16px}
+  .field{margin-bottom:11px}
+  .field label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.02em}
+  .field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;
+    font-size:13.5px;font-family:inherit;color:var(--ink);background:#fff}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--pink)}
+  .field textarea{min-height:64px;resize:vertical;line-height:1.5}
+  .field.kind-attr-href input,.field.kind-attr-src input{color:var(--pink-dark);font-size:12.5px}
+  .divider{border:none;border-top:1px dashed var(--line);margin:14px 0 12px}
+  .vid-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#fdf1f7;border:1px solid #f3d3e4;border-radius:10px;padding:10px;margin-bottom:11px}
+  .vid-tools .status{font-size:12px;color:var(--muted);flex-basis:100%}
+  .vid-tools .status.ok{color:#2e8b57}.vid-tools .status.err{color:#c0392b}
+  .thumb-mini{width:96px;aspect-ratio:16/9;border-radius:7px;object-fit:cover;border:1px solid var(--line);background:#eee}
+  .mini{font-size:12px;padding:8px 12px;border-radius:8px;white-space:nowrap}
+  .loadbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;text-align:center}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;
+    padding:12px 20px;border-radius:30px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:.35s;z-index:60}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Центр знаний · <b>админка</b></div>
+  <div class="sp"></div>
+  <button class="btn ghost" onclick="document.getElementById('fileInput').click()">Загрузить index.html</button>
+  <input type="file" id="fileInput" accept=".html" style="display:none" onchange="loadFromFile(event)">
+  <button class="btn ghost" onclick="expandAll(true)">Развернуть всё</button>
+  <button class="btn primary" onclick="exportHTML()">Скачать index.html</button>
+</header>
+
+<div class="wrap">
+  <div class="hint">
+    <b>Редактируйте всё:</b> тексты, ссылки и картинки страницы сгруппированы по разделам. Меняете поля → жмёте
+    <b>«Скачать index.html»</b> и кладёте файл на сайт (папку <b>img/</b> — рядом).<br>
+    <b>Видео:</b> вставьте ссылку Rutube и нажмите «Получить превью» — обложка подтянется (если браузер не заблокирует; иначе поможет
+    скрипт <b>fetch_rutube_thumbs.py</b>). Картинки указывайте как <b>img/имя.jpg</b> и кладите файл в папку <b>img/</b>.
+  </div>
+  <input class="search" id="search" placeholder="Поиск по полям…  (например: заголовок, telegram, картинка)" oninput="applyFilter(this.value)">
+  <div id="app"></div>
+  <div id="loadbox" class="loadbox" style="display:none">
+    <p style="margin-bottom:14px">Не удалось открыть <b>index.html</b> автоматически (так бывает при открытии с диска).</p>
+    <button class="btn primary" onclick="document.getElementById('fileInput').click()">Выбрать index.html вручную</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+let SRC_DOC=null;      // живой документ страницы
+let FIELDS=[];         // список полей {kind, el, attr, label, group, sub}
+const SYM=/^[\s↓→←↗↘↙•·|—–\-*]+$/;
+const INLINE=['SPAN','I','B','EM','STRONG','BR','SUP','SUB'];
+
+/* ---------- группы (разделы) ---------- */
+const GROUPS=[
+  {key:'header', name:'Шапка и меню', match:el=>el.closest('.header,nav.nav')},
+  {key:'hero',   name:'Обложка (Hero)', match:el=>el.closest('.hero')},
+  {key:'articles', name:'Статьи', match:el=>el.closest('#articles')},
+  {key:'cases',  name:'Кейсы', match:el=>el.closest('#cases')},
+  {key:'media',  name:'Видео и мероприятия', match:el=>el.closest('#media')},
+  {key:'social', name:'Каналы (блок «Выберите канал»)', match:el=>el.closest('#social')},
+  {key:'contact',name:'Форма связи', match:el=>el.closest('#contact')},
+  {key:'footer', name:'Подвал', match:el=>el.closest('footer')},
+];
+function groupOf(el){ for(const g of GROUPS){ try{ if(g.match(el)) return g; }catch(e){} } return {key:'other',name:'Прочее'}; }
+
+/* ---------- утилиты ---------- */
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function labelNode(a){ let best=null; a.childNodes.forEach(n=>{ if(n.nodeType===3){ const t=n.textContent.trim(); if(t&&(!best||t.length>best.textContent.trim().length)) best=n; } }); return best; }
+function getVal(f){
+  if(f.kind==='text') return f.el.textContent;
+  if(f.kind==='html') return f.el.innerHTML.trim();
+  if(f.kind==='attr') return f.el.getAttribute(f.attr)||'';
+  if(f.kind==='label'){ const n=labelNode(f.el); return n?n.textContent.trim():''; }
+  return '';
+}
+function setVal(i,val){
+  const f=FIELDS[i]; if(!f)return;
+  if(f.kind==='text') f.el.textContent=val;
+  else if(f.kind==='html') f.el.innerHTML=val;
+  else if(f.kind==='attr') f.el.setAttribute(f.attr,val);
+  else if(f.kind==='label'){ const n=labelNode(f.el); if(n){ const lead=(n.textContent.match(/^\s*/)||[''])[0], tail=(n.textContent.match(/\s*$/)||[''])[0]; n.textContent=lead+val+tail; } }
+  if(f.thumbFor!==undefined) updateThumbPreview(f.thumbFor);
+}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3000);}
+function rutubeId(url){ const m=String(url||'').match(/rutube\.ru\/(?:video|play\/embed)\/([0-9a-fA-F]+)/); return m?m[1]:''; }
+
+/* ---------- обнаружение полей ---------- */
+function push(f){ f.i=FIELDS.length; FIELDS.push(f); return f; }
+function tagLabel(el){
+  const c=el.classList;
+  if(c.contains('eyebrow')) return 'Надзаголовок';
+  if(c.contains('hero-copy')||c.contains('lead')) return 'Подзаголовок';
+  if(c.contains('mini-tag')||c.contains('case-tag')||c.contains('social-card-badge')) return 'Метка';
+  if(c.contains('metric')) return 'Цифра';
+  if(c.contains('metric-caption')) return 'Подпись к цифре';
+  if(c.contains('duration')) return 'Длительность';
+  if(c.contains('social-card-title')) return 'Название канала';
+  if(c.contains('social-card-desc')) return 'Описание канала';
+  if(c.contains('footer-title')) return 'Заголовок подвала';
+  const t=el.tagName;
+  if(t==='H1'||t==='H2'||t==='H3'||t==='H4') return 'Заголовок';
+  if(t==='P') return 'Текст';
+  if(t==='STRONG') return 'Значение';
+  if(t==='LABEL') return 'Подпись поля';
+  return 'Текст';
+}
+
+function discover(){
+  FIELDS=[]; const done=new WeakSet();
+  const inlineOnly=el=>el.childElementCount>0 && [...el.children].every(c=>INLINE.includes(c.tagName));
+
+  // 1) МОДАЛЬНЫЕ КАРТОЧКИ (статьи, кейсы, видео)
+  SRC_DOC.querySelectorAll('[data-modal-title]').forEach((card,ci)=>{
+    const g=groupOf(card);
+    const isVideo = !!card.dataset.modalEmbed || /rutube\.ru\/video/.test(card.dataset.modalLink||'') || card.classList.contains('video-card');
+    const cardId='card'+ci;
+    push({kind:'attr',el:card,attr:'data-modal-kicker',label:'Бейдж в окне',group:g,sub:cardId,head:card.dataset.modalTitle||'Карточка'});
+    push({kind:'attr',el:card,attr:'data-modal-title',label:'Заголовок (в окне)',group:g,sub:cardId});
+    push({kind:'attr',el:card,attr:'data-modal-text',label:'Текст (в окне)',group:g,sub:cardId,big:true});
+    push({kind:'attr',el:card,attr:'data-modal-link',label:'Ссылка «читать/смотреть»',group:g,sub:cardId,video:isVideo?ci:undefined});
+    push({kind:'attr',el:card,attr:'data-modal-cta',label:'Надпись кнопки',group:g,sub:cardId});
+    // видимые тексты карточки
+    card.querySelectorAll('h3,p,.case-tag,.cover-number,.case-result strong').forEach(el=>{
+      if(el.childElementCount===0 && el.textContent.trim()){ push({kind:'text',el,label:'· '+tagLabel(el)+' (на карточке)',group:g,sub:cardId}); done.add(el); }
+    });
+    // мета «A <i></i> B»
+    const meta=card.querySelector('.meta');
+    if(meta){ push({kind:'html',el:meta,label:'· Метка (через <i></i>)',group:g,sub:cardId,small:true}); done.add(meta); [...meta.querySelectorAll('*')].forEach(x=>done.add(x)); }
+    // превью видео
+    if(isVideo){
+      let img=card.querySelector('.video-thumb img');
+      const f=push({kind:'video',el:card,label:'Превью видео',group:g,sub:cardId,videoIndex:ci});
+    }
+    [...card.querySelectorAll('*')].forEach(x=>{ if(x.childElementCount===0) done.add(x); });
+    done.add(card);
+  });
+
+  // 2) ЗАГОЛОВКИ с разметкой (например H1 со <span>)
+  SRC_DOC.querySelectorAll('main h1,main h2,main h3,main h4').forEach(h=>{
+    if(done.has(h)) return;
+    if(inlineOnly(h)){ push({kind:'html',el:h,label:'Заголовок (с разметкой)',group:groupOf(h),small:true}); done.add(h); [...h.querySelectorAll('*')].forEach(x=>done.add(x)); }
+  });
+
+  // 3) МЕТКИ .meta вне карточек
+  SRC_DOC.querySelectorAll('main .meta').forEach(m=>{ if(done.has(m))return; push({kind:'html',el:m,label:'Метка (через <i></i>)',group:groupOf(m),small:true}); done.add(m); [...m.querySelectorAll('*')].forEach(x=>done.add(x)); });
+
+  // 4) ТЕКСТОВЫЕ «листья»
+  SRC_DOC.querySelectorAll('main *, footer *, .header *, nav *').forEach(el=>{
+    if(el.tagName==='SCRIPT'||el.tagName==='STYLE') return;
+    if(el.childElementCount!==0) return;
+    if(done.has(el)) return;
+    const t=el.textContent.trim();
+    if(t.length<2 || SYM.test(t)) return;
+    if(el.tagName==='OPTION') return;
+    push({kind:'text',el,label:tagLabel(el),group:groupOf(el)}); done.add(el);
+  });
+
+  // 5) ССЫЛКИ (href) + подсказки каналов
+  SRC_DOC.querySelectorAll('main a[href], footer a[href], .header a[href], nav a[href]').forEach(a=>{
+    const g=groupOf(a);
+    push({kind:'attr',el:a,attr:'href',label:'Ссылка (URL)',group:g});
+    if(a.childElementCount>0 && labelNode(a)) push({kind:'label',el:a,label:'Текст ссылки',group:g});
+  });
+  SRC_DOC.querySelectorAll('[data-channel-title]').forEach(a=>{
+    const g=groupOf(a);
+    push({kind:'attr',el:a,attr:'data-channel-title',label:'Канал: название (в подсказке)',group:g});
+    push({kind:'attr',el:a,attr:'data-channel',label:'Канал: описание (в подсказке)',group:g,small:true});
+  });
+
+  // 6) КАРТИНКИ
+  SRC_DOC.querySelectorAll('img').forEach(img=>{ push({kind:'attr',el:img,attr:'src',label:'Картинка (адрес)',group:groupOf(img)}); });
+}
+
+/* ---------- рендер ---------- */
+function fieldHTML(f){
+  const val=getVal(f);
+  const kindCls = f.kind==='attr' ? ('kind-attr-'+f.attr) : '';
+  if(f.kind==='video'){
+    const id=rutubeId(f.el.dataset.modalLink||'');
+    const img=f.el.querySelector('.video-thumb img');
+    const src=img?img.getAttribute('src'):'';
+    return `<div class="vid-tools" id="vt_${f.videoIndex}">
+      <img class="thumb-mini" id="tm_${f.videoIndex}" src="${esc(src)}" alt="">
+      <button class="btn primary mini" onclick="grabThumb(${f.videoIndex})">Получить превью с Rutube</button>
+      <span style="font-size:12px;color:var(--muted)">${id?('id: '+id):'вставьте ссылку Rutube выше'}</span>
+      <span class="status" id="vs_${f.videoIndex}"></span>
+    </div>`;
+  }
+  const big = f.big, small=f.small;
+  const input = (big||small||f.kind==='html')
+    ? `<textarea class="fld" data-i="${f.i}" oninput="setVal(${f.i},this.value)" ${small?'style="min-height:48px"':''}>${esc(val)}</textarea>`
+    : `<input class="fld" data-i="${f.i}" value="${esc(val)}" oninput="setVal(${f.i},this.value)">`;
+  return `<div class="field ${kindCls}"><label>${esc(f.label)}</label>${input}</div>`;
+}
+
+function render(){
+  const app=document.getElementById('app');
+  // группируем
+  const order=GROUPS.map(g=>g.key).concat('other');
+  const byGroup={};
+  FIELDS.forEach(f=>{ (byGroup[f.group.key]=byGroup[f.group.key]||[]).push(f); });
+  let html='';
+  order.forEach(k=>{
+    const list=byGroup[k]; if(!list||!list.length) return;
+    const gname=(GROUPS.find(g=>g.key===k)||{name:'Прочее'}).name;
+    html+=`<details class="sec" open><summary>${gname} <span class="cnt">(${list.length})</span></summary><div class="sec-body">`;
+    let curSub=null;
+    list.forEach(f=>{
+      if(f.sub && f.sub!==curSub){ if(curSub!==null) html+='<hr class="divider">'; curSub=f.sub; if(f.head) html+=`<div style="font-weight:800;font-size:13px;margin:2px 0 8px;color:var(--pink-dark)">▸ ${esc(f.head)}</div>`; }
+      if(!f.sub) curSub=null;
+      html+=fieldHTML(f);
+    });
+    html+=`</div></details>`;
+  });
+  app.innerHTML=html;
+}
+function expandAll(open){ document.querySelectorAll('details.sec').forEach(d=>d.open=open); }
+function applyFilter(q){
+  q=(q||'').trim().toLowerCase();
+  document.querySelectorAll('details.sec').forEach(sec=>{
+    let any=false;
+    sec.querySelectorAll('.field').forEach(fl=>{
+      const lab=(fl.querySelector('label')?.textContent||'').toLowerCase();
+      const v=(fl.querySelector('.fld')?.value||'').toLowerCase();
+      const show=!q||lab.includes(q)||v.includes(q);
+      fl.style.display=show?'':'none'; if(show)any=true;
+    });
+    if(q){ sec.open=any; sec.style.display=any?'':'none'; } else { sec.style.display=''; }
+  });
+}
+
+/* ---------- превью видео ---------- */
+async function fetchThumb(id){
+  const urls=[`https://rutube.ru/api/video/${id}/?format=json`,`https://rutube.ru/api/oembed/?url=https://rutube.ru/video/${id}/&format=json`];
+  for(const u of urls){ try{ const r=await fetch(u,{headers:{'Accept':'application/json'}}); if(!r.ok)continue; const j=await r.json(); const t=j.thumbnail_url||j.picture_url; if(t) return t+(t.includes('?')?'&':'?')+'width=800'; }catch(e){} }
+  return null;
+}
+function ensureThumbImg(card){
+  let thumb=card.querySelector('.video-thumb'); if(!thumb) return null;
+  let img=thumb.querySelector('img');
+  if(!img){ img=SRC_DOC.createElement('img'); img.setAttribute('alt',''); img.setAttribute('loading','lazy'); thumb.insertBefore(img,thumb.firstChild); }
+  return img;
+}
+function updateThumbPreview(vi){
+  const card=videoCard(vi); if(!card)return;
+  const img=card.querySelector('.video-thumb img');
+  const tm=document.getElementById('tm_'+vi);
+  if(tm) tm.src=img?img.getAttribute('src'):'';
+}
+function videoCard(vi){ return SRC_DOC.querySelectorAll('[data-modal-title]')[vi]; }
+async function grabThumb(vi){
+  const card=videoCard(vi); const st=document.getElementById('vs_'+vi); if(!card||!st)return;
+  const id=rutubeId(card.dataset.modalLink||'');
+  if(!id){ st.className='status err'; st.textContent='Не распознал id — проверьте ссылку Rutube'; return; }
+  card.setAttribute('data-modal-embed',`https://rutube.ru/play/embed/${id}/`);
+  st.className='status'; st.textContent='Запрашиваю обложку…';
+  const t=await fetchThumb(id);
+  if(t){ const img=ensureThumbImg(card); img.setAttribute('src',t); document.getElementById('tm_'+vi).src=t;
+    st.className='status ok'; st.textContent='Обложка получена ✓ (не забудьте «Скачать index.html»)'; }
+  else { st.className='status err'; st.textContent='Браузер заблокировал запрос (CORS). Впишите адрес картинки вручную в поле ниже или запустите fetch_rutube_thumbs.py.'; }
+}
+
+/* ---------- экспорт ---------- */
+function exportHTML(){
+  if(!SRC_DOC){ toast('Сначала загрузите index.html'); return; }
+  const out='<!DOCTYPE html>\n'+SRC_DOC.documentElement.outerHTML;
+  const blob=new Blob([out],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='index.html'; a.click(); URL.revokeObjectURL(a.href);
+  toast('index.html скачан. Замените им файл на сайте.');
+}
+
+/* ---------- загрузка ---------- */
+function initFromHTML(html){
+  SRC_DOC=new DOMParser().parseFromString(html,'text/html');
+  discover(); render();
+  document.getElementById('loadbox').style.display='none';
+}
+function loadFromFile(e){ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{ initFromHTML(r.result); toast('Загружено. Полей: '+FIELDS.length); }; r.readAsText(f); }
+window.addEventListener('DOMContentLoaded',async()=>{
+  try{ const r=await fetch('index.html'); if(r.ok){ initFromHTML(await r.text()); return; } }catch(e){}
+  document.getElementById('loadbox').style.display='block';
+});
+</script>
+</body>
+</html>
